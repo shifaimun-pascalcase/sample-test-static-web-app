@@ -1,0 +1,37 @@
+# Installed by Tower Cloud for function qa-gitpush-1012. THIS FILE IS YOURS — edit it freely.
+#
+# Tower only needs the step below to keep calling the deploy action with this
+# function's token. Everything else is yours to change: add paths for shared code
+# your function depends on, pin the action to a commit, change runs-on, add steps.
+# Enabling auto-deploy again rotates the token and will NOT rewrite this file.
+# Function: qa-gitpush-1012 (8b71a4b8-19f1-46f0-a012-238b1a3660db)
+name: "Tower deploy: qa-gitpush-1012"
+on:
+  push:
+    branches: ["qa-function-e2e-20261012"]
+    paths:
+      - "function-test/**"
+concurrency:
+  group: tower-fn-8b71a4b8-19f1-46f0-a012-238b1a3660db
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build on Tower and release if enabled
+        uses: Tower-Cloud/function-deploy-action@v1
+        with:
+          api-url: ${{ secrets.TOWER_FN_API_URL_8B71A4B8_19F1_46F0_A012_238B1A3660DB }}
+          function-id: 8b71a4b8-19f1-46f0-a012-238b1a3660db
+          token: ${{ secrets.TOWER_FN_DEPLOY_TOKEN_8B71A4B8_19F1_46F0_A012_238B1A3660DB }}
+          ref: ${{ github.ref_name }}
+          commit: ${{ github.sha }}
+          idempotency-key: 8b71a4b8-19f1-46f0-a012-238b1a3660db-${{ github.sha }}-${{ github.run_attempt }}
+      - name: Release the Tower build slot on cancellation
+        if: cancelled()
+        uses: Tower-Cloud/function-deploy-action@v1
+        with:
+          api-url: ${{ secrets.TOWER_FN_API_URL_8B71A4B8_19F1_46F0_A012_238B1A3660DB }}
+          function-id: 8b71a4b8-19f1-46f0-a012-238b1a3660db
+          token: ${{ secrets.TOWER_FN_DEPLOY_TOKEN_8B71A4B8_19F1_46F0_A012_238B1A3660DB }}
+          cancel: "true"
