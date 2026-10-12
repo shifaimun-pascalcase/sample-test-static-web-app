@@ -4,7 +4,7 @@ const port = process.env.PORT || 8080;
 
 const server = http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': 'application/json' });
-  res.end(JSON.stringify({ revision: 'v1', method: req.method, path: req.url }) + '\n');
+  res.end(JSON.stringify({ revision: 'v2', method: req.method, path: req.url }) + '\n');
 });
 
 server.listen(port, '0.0.0.0', () => {
